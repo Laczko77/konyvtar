@@ -154,7 +154,7 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
     * `LoanResponse` `overdue` flag helyes számítása (aktív lejárt = `true`, aktív határidőn belüli = `false`, lezárt = `false`).
   * `BookServiceTest` & `AuthServiceTest`: alap CRUD/szűrési és regisztrációs hibaágak (duplikált ISBN/email).
 
-- [ ] **BL-033** `[P0]` **Integrációs tesztek (Testcontainers PostgreSQL + MockMvc)**
+- [x] **BL-033** `[P0]` **Integrációs tesztek (Testcontainers PostgreSQL + MockMvc)**
   * Közös Testcontainers bázisosztály PostgreSQL 16 konténerrel, Flyway migrációk (`V1`, `V2`) és `ddl-auto=validate` automatikus ellenőrzésével.
   * E2E teszt: Login (`POST /api/auth/login`) -> JWT kinyerése -> Könyv kölcsönzése (`POST /api/loans`) -> Kölcsönzések lekérdezése (`GET /api/loans/my`) -> Visszahozás (`PATCH /api/loans/{id}/return`).
   * Jogosultsági (RBAC) tesztek:
@@ -201,14 +201,14 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
 
 * **Cél:** Egy paranccsal indítható konténerizált rendszer, zöld CI pipeline és portfólió-minőségű README.
 
-- [ ] **BL-050** `[P1]` **Backend `Dockerfile` (multi-stage build)**
+- [x] **BL-050** `[P1]` **Backend `Dockerfile` (multi-stage build)**
   * `backend/Dockerfile` létrehozása a PRD 8. pontja szerint (`maven:3.9-eclipse-temurin-21` build -> `eclipse-temurin:21-jre` runtime).
   * `.dockerignore` létrehozása (`target/`, stb.).
 
-- [ ] **BL-051** `[P2]` **Frontend `Dockerfile` és Nginx konfiguráció (opcionális MVP bővítés)**
+- [x] **BL-051** `[P2]` **Frontend `Dockerfile` és Nginx konfiguráció (opcionális MVP bővítés)**
   * `frontend/Dockerfile` multi-stage build (Node build -> Nginx) a `4200`-as vagy `80`-as portra, Angular SPA routing (`try_files $uri $uri/ /index.html`) és `/api` proxy támogatással.
 
-- [ ] **BL-052** `[P1]` **`docker-compose.yml` összeállítása**
+- [x] **BL-052** `[P1]` **`docker-compose.yml` összeállítása**
   * `db` (`postgres:16` healthcheckkel) és `api` (`build: ./backend`, `depends_on: service_healthy`) szolgáltatások bekötése.
   * Opcionálisan `frontend` service bekötése a `4200`-as porton.
   * Tiszta indítás ellenőrzése `docker compose up --build` paranccsal.
@@ -217,7 +217,7 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
   * `push` és `pull_request` triggerek, Java 21 (Temurin) + Maven cache, `mvn -B verify` futtatása a `./backend` könyvtárban.
   * Ellenőrzés: a Testcontainers tesztek hiba nélkül lefutnak CI környezetben.
 
-- [ ] **BL-054** `[P1]` **Teljes `README.md` elkészítése**
+- [x] **BL-054** `[P1]` **Teljes `README.md` elkészítése**
   * Rövid leírás, CI badge (és opcionális élő demó link).
   * Képernyőkép vagy GIF az alkalmazásról.
   * Tech stack felsorolása.
