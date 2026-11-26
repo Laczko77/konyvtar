@@ -18,6 +18,7 @@ Modern, konténerizált könyvtár- és kölcsönzéskezelő webalkalmazás **Ja
 - [Üzleti szabályok](#üzleti-szabályok)
 - [Tesztek futtatása](#tesztek-futtatása)
 - [Mit tanultam a projektből](#mit-tanultam-a-projektből)
+- [Továbbfejlesztési lehetőségek](#továbbfejlesztési-lehetőségek)
 
 ---
 
@@ -187,3 +188,14 @@ npm run build
 
 5. **Jogosultságkezelés az UI-n túl:**
    Az Angular oldalon lévő route guardok és elrejtett admin gombok önmagukban még nem jelentenek biztonságot. A valódi védelmet a stateless JWT filter és a backend `@PreAuthorize` szabályai adják — ezért írtam külön integrációs teszteket arra is, hogy egy sima `MEMBER` tokennel tényleg `403 Forbidden`-t kapjon az admin végpontokra, token nélkül pedig `401 Unauthorized`-ot.
+
+---
+
+## Továbbfejlesztési lehetőségek
+
+Az MVP lezárása és a kód átvizsgálása után az alábbi irányokban érdemes továbbvinni a projektet:
+
+- **Párhuzamos kölcsönzési limit védelme felhasználói szinten:** A `Book` entitáson lévő `@Version` megfogja, ha ketten ugyanazt a könyvet akarják egyszerre kikölcsönözni. Ha viszont ugyanaz a tag pontosan egyszerre két *különböző* könyvet próbál kivenni a 3 könyves limit közelében, érdemes pesszimista zárolást tenni a felhasználói sorra a kölcsönzés idejére.
+- **Könyvek archiválása (soft delete) végleges törlés helyett:** A már kölcsönzési előzménnyel rendelkező könyveket a backend jelenleg tudatosan védi a törléstől (`409 Conflict` / `BookHasLoanHistoryException`), hogy ne vesszen el a történeti adat. Egy `archived` mezővel az ilyen példányok elrejthetők lennének az aktív katalógusból adatvesztés nélkül.
+- **Kölcsönzések lapozása és szűrése:** A könyvkatalógushoz hasonlóan a `/api/loans` és `/api/loans/my` végpontokra is érdemes `Pageable` lapozást, valamint tagra vagy dátumra való szűrést tenni nagyobb adatmennyiség esetére.
+- **Frontend komponens-tesztek és élő demó deploy:** A projektben jelenleg a backend oldali unit és Testcontainers integrációs tesztek adják a fő tesztlefedettséget. Következő lépésként érdemes az Angular oldalakhoz is több egységtesztet írni, illetve a CI workflow-t kiegészíteni egy automata deploy lépéssel (CD).
