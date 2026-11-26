@@ -132,18 +132,18 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
 
 * **Cél:** Stateless JWT hitelesítés, szerepkör-alapú jogosultságkezelés, valamint átfogó unit és Testcontainers integrációs tesztek.
 
-- [ ] **BL-030** `[P0]` **JWT szolgáltatás és autentikációs filter**
+- [x] **BL-030** `[P0]` **JWT szolgáltatás és autentikációs filter**
   * `JwtService`: HMAC-SHA256 aláírás (`JWT_SECRET`-ből), token generálás (subject = email, role claim), token validálás és claim kinyerés.
   * `JwtAuthenticationFilter` (`OncePerRequestFilter`): `Authorization: Bearer <token>` feldolgozása, `SecurityContextHolder` feltöltése.
   * `CustomUserDetailsService` + `BCryptPasswordEncoder`.
 
-- [ ] **BL-031** `[P0]` **Security konfiguráció és Auth végpontok**
+- [x] **BL-031** `[P0]` **Security konfiguráció és Auth végpontok**
   * `SecurityConfig`: CSRF kikapcsolása (stateless API), `SessionCreationPolicy.STATELESS`, CORS konfiguráció (`http://localhost:4200`), publikus végpontok (`/api/auth/**`, `/swagger-ui.html`, `/swagger-ui/**`, `/v3/api-docs/**`), minden más hitelesítéshez kötve, `@EnableMethodSecurity` (`@PreAuthorize`).
   * `AuthService` & `AuthController`:
     * `POST /api/auth/register` — publikus `MEMBER` regisztráció, BCrypt jelszó-hash, email duplikáció ellenőrzés.
     * `POST /api/auth/login` — hitelesítés `AuthenticationManager`-rel, JWT token visszaadása.
 
-- [ ] **BL-032** `[P0]` **Unit tesztek (JUnit 5 + Mockito)**
+- [x] **BL-032** `[P0]` **Unit tesztek (JUnit 5 + Mockito)**
   * `LoanServiceTest`:
     * Sikeres kölcsönzés (`available` -> `false`, `due_date = +14 nap`).
     * Sikeres visszahozás (`returned_at` kitöltve, `available` -> `true`).
@@ -168,30 +168,30 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
 
 * **Cél:** Letisztult, funkcionális Angular felület a fő felhasználói folyamatokhoz (`Login`, `Könyvek`, `Kölcsönzések`).
 
-- [ ] **BL-040** `[P1]` **Angular alkalmazás inicializálása és core réteg**
+- [x] **BL-040** `[P1]` **Angular alkalmazás inicializálása és core réteg**
   * Standalone komponens alapú Angular (aktuális LTS) projekt létrehozása a `frontend/` mappában.
   * Környezeti konfiguráció (`API_URL`), routing (`app.routes.ts`), `provideHttpClient(withInterceptors([authInterceptor]))`.
   * `AuthService`: login, register, logout, JWT token mentése/olvasása `localStorage`-ból, aktuális user és szerepkör (`ADMIN`/`MEMBER`) dekódolása vagy `/api/members/me` betöltése.
   * `authInterceptor`: `Authorization: Bearer <token>` csatolása és `401` esetén átirányítás a `/login` oldalra.
   * `authGuard`: védett útvonalak őrzése.
 
-- [ ] **BL-041** `[P1]` **Bejelentkezés és regisztráció oldal**
+- [x] **BL-041** `[P1]` **Bejelentkezés és regisztráció oldal**
   * Email + jelszó űrlap reaktív validációval, szerveroldali hibaüzenetek megjelenítése.
   * Regisztrációs nézet/fül (`POST /api/auth/register`) új tagoknak.
   * Sikeres belépés után átirányítás a könyvek listájára.
 
-- [ ] **BL-042** `[P1]` **Könyvek oldal (böngészés, szűrés, CRUD, kölcsönzés)**
+- [x] **BL-042** `[P1]` **Könyvek oldal (böngészés, szűrés, CRUD, kölcsönzés)**
   * Keresőmező (cím és szerző szerint), elérhetőség szűrő (`Mind` / `Csak elérhető` / `Kikölcsönzött`).
   * Táblázatos lista lapozással (`page`, `size`, előző/következő oldal).
   * „Kölcsönzés” gomb az elérhető könyveknél (`POST /api/loans`), visszajelzés sikerről vagy üzleti hibáról (pl. max. 3 könyv limit).
   * `ADMIN` funkciók: „Új könyv” létrehozása, könyv szerkesztése és „Törlés” gomb megerősítéssel.
 
-- [ ] **BL-043** `[P1]` **Kölcsönzéseim / Összes kölcsönzés oldal**
+- [x] **BL-043** `[P1]` **Kölcsönzéseim / Összes kölcsönzés oldal**
   * Aktív és lezárt kölcsönzések listázása (`GET /api/loans/my`, `ADMIN` esetén `GET /api/loans` nézetváltóval és `overdue=true` szűrővel).
   * Piros `Késedelmes` jelvény megjelenítése, ha `overdue === true`.
   * „Visszahozás” gomb aktív kölcsönzéseknél (`PATCH /api/loans/{id}/return`) és lista automatikus frissítése.
 
-- [ ] **BL-044** `[P2]` **Alap layout, navigáció és tagok nézet (`ADMIN`)**
+- [x] **BL-044** `[P2]` **Alap layout, navigáció és tagok nézet (`ADMIN`)**
   * Felső navigációs sáv (Könyvek, Kölcsönzéseim, [Admin: Összes kölcsönzés / Tagok], felhasználónév + szerepkör + Kijelentkezés).
   * Tagok listája nézet `ADMIN` szerepkörhöz (`GET /api/members`).
 

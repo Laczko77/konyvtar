@@ -1,0 +1,34 @@
+@if (authService.isAuthenticated()) {
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <a routerLink="/books" class="brand">Könyvtár</a>
+        <nav class="nav-links" aria-label="Fő navigáció">
+          <a routerLink="/books" routerLinkActive="active">Könyvek</a>
+          <a routerLink="/loans" routerLinkActive="active">Kölcsönzéseim</a>
+          @if (authService.isAdmin()) {
+            <a routerLink="/members" routerLinkActive="active">Tagok</a>
+          }
+        </nav>
+      </div>
+
+      <div class="navbar-right">
+        @if (authService.currentUser(); as user) {
+          <div class="user-chip">
+            <span class="user-name">{{ user.fullName }}</span>
+            <span class="badge" [class.badge-warning]="user.role === 'ADMIN'" [class.badge-neutral]="user.role === 'MEMBER'">
+              {{ user.role }}
+            </span>
+          </div>
+        }
+        <button type="button" class="btn btn-secondary btn-sm" (click)="logout()">
+          Kijelentkezés
+        </button>
+      </div>
+    </div>
+  </header>
+}
+
+<main>
+  <router-outlet />
+</main>
