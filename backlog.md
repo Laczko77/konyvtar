@@ -213,7 +213,7 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
   * Opcionálisan `frontend` service bekötése a `4200`-as porton.
   * Tiszta indítás ellenőrzése `docker compose up --build` paranccsal.
 
-- [ ] **BL-053** `[P1]` **GitHub Actions CI pipeline (`.github/workflows/ci.yml`)**
+- [x] **BL-053** `[P1]` **GitHub Actions CI pipeline (`.github/workflows/ci.yml`)**
   * `push` és `pull_request` triggerek, Java 21 (Temurin) + Maven cache, `mvn -B verify` futtatása a `./backend` könyvtárban.
   * Ellenőrzés: a Testcontainers tesztek hiba nélkül lefutnak CI környezetben.
 
@@ -226,7 +226,7 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
   * Tesztek futtatása (`mvn verify`).
   * **Mit tanultam / architekturális döntések:** DTO vs. Entitás, N+1 elkerülése `@EntityGraph`-fal, Flyway vs. `ddl-auto=update`, `@Version` optimista zárolás.
 
-- [ ] **BL-055** `[P0]` **Készre jelentés ellenőrzőlista (PRD 10. fejezet)**
+- [x] **BL-055** `[P0]` **Készre jelentés ellenőrzőlista (PRD 10. fejezet)**
   * `docker compose up` tiszta környezetben hiba nélkül elindítja a rendszert.
   * A CI zöld, és a badge szerepel a `README.md` tetején.
   * Az üzleti szabályokra és hibaágakra szóló unit és integrációs tesztek zöldek.
