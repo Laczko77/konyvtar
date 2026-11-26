@@ -8,6 +8,7 @@ Modern, konténerizált könyvtár- és kölcsönzéskezelő webalkalmazás **Ja
 
 ## Tartalomjegyzék
 
+- [Képernyőképek](#képernyőképek)
 - [Architektúra áttekintése](#architektúra-áttekintése)
 - [Technológiai stack](#technológiai-stack)
 - [Indítás egy paranccsal (Docker Compose)](#indítás-egy-paranccsal-docker-compose)
@@ -17,6 +18,19 @@ Modern, konténerizált könyvtár- és kölcsönzéskezelő webalkalmazás **Ja
 - [Üzleti szabályok](#üzleti-szabályok)
 - [Tesztek futtatása](#tesztek-futtatása)
 - [Mit tanultam / Architekturális döntések](#mit-tanultam--architekturális-döntések)
+
+---
+
+## Képernyőképek
+
+### Bejelentkezés és regisztráció
+![Bejelentkezés és regisztráció](./docs/screenshots/login.png)
+
+### Könyvkatalógus (szűrés, kölcsönzés és Admin CRUD)
+![Könyvkatalógus](./docs/screenshots/books.png)
+
+### Kölcsönzéseim (késedelmi jelzés és visszahozás)
+![Kölcsönzéseim](./docs/screenshots/loans.png)
 
 ---
 
