@@ -17,7 +17,7 @@ Modern, konténerizált könyvtár- és kölcsönzéskezelő webalkalmazás **Ja
 - [API dokumentáció és fő végpontok](#api-dokumentáció-és-fő-végpontok)
 - [Üzleti szabályok](#üzleti-szabályok)
 - [Tesztek futtatása](#tesztek-futtatása)
-- [Mit tanultam / Architekturális döntések](#mit-tanultam--architekturális-döntések)
+- [Mit tanultam a projektből](#mit-tanultam-a-projektből)
 
 ---
 
@@ -171,16 +171,19 @@ npm run build
 
 ---
 
-## Mit tanultam / Architekturális döntések
+## Mit tanultam a projektből
 
-1. **DTO `record`-ok vs. JPA entitások visszaadása:**
-   Egyetlen REST controller sem ad vissza JPA entitást; minden bemenet és kimenet Java `record` DTO-n (`BookRequest`, `BookResponse`, `LoanResponse`, `AuthResponse`, `MemberResponse`) keresztül történik. Így az API szerződés független marad az adatbázis-modelltől, elkerülhető a véletlen `LazyInitializationException` vagy JSON körkörös hivatkozás, és a számított mezők (pl. `LoanResponse.overdue`) tisztán, a prezentációs réteg szempontjából képezhetők le.
+1. **Miért nem adok vissza JPA entitást a controllerből:**
+   Korábbi gyakorlóprojektjeimben kényelmesnek tűnt közvetlenül az entitásokat visszaadni a REST végpontokból, itt viszont tudatosan külön Java `record` DTO-kat használtam minden kéréshez és válaszhoz. Így biztosan nem szivárog ki érzékeny adat (például a jelszó hash), nem törik el a szerializáció a `LAZY` kapcsolatok miatt, és az olyan számított mezők, mint a késedelmi jelzés (`overdue`), tisztán elférnek a `LoanResponse`-ban adatbázis-oszlop nélkül is.
 
-2. **N+1 lekérdezési probléma elkerülése `@EntityGraph`-fal:**
-   A `Loan` entitáson a `book` és `user` kapcsolatok `FetchType.LAZY` beállításúak, az `application.yml`-ben pedig `spring.jpa.open-in-view: false` van érvényben. A `LoanRepository` lekérdezései (`findByUserIdOrderByBorrowedAtDesc`, `findAllByOrderByBorrowedAtDesc`, `findOverdueLoans`, `findNonOverdueLoans`, `findWithDetailsById`) `@EntityGraph(attributePaths = {"book", "user"})` annotációt használnak, így a kölcsönzéslisták egyetlen `JOIN` lekérdezéssel töltődnek be N+1 probléma nélkül.
+2. **`open-in-view: false` és az N+1 probléma kezelése:**
+   Direkt kikapcsoltam a Spring Boot alapértelmezett `spring.jpa.open-in-view` beállítását, a `Loan` entitáson pedig `LAZY` kapcsolatokat használtam. Így fejlesztés közben azonnal látszott, ha egy végpont a tranzakción kívül próbált volna adatot betölteni, vagy felesleges extra lekérdezéseket generált volna. A `LoanRepository`-ban `@EntityGraph`-fal oldottam meg, hogy a listázások egyetlen `JOIN` lekérdezéssel megkapják a könyv- és felhasználói adatokat is.
 
-3. **Flyway vs. `spring.jpa.hibernate.ddl-auto=update`:**
-   Az alkalmazásban szigorúan `spring.jpa.hibernate.ddl-auto: validate` fut, és minden tábladefiníció (`V1__init_schema.sql`) valamint mintaadat (`V2__seed_data.sql`) Flyway migráción keresztül kerül az adatbázisba. A Hibernate `ddl-auto=update` éles környezetben kiszámíthatatlan sémamódosításokat okozhat (és nem kezeli a törléseket vagy adat-migrációkat), míg a Flyway verziózott, auditálható és tesztben (Testcontainers) is pontosan ugyanúgy ellenőrizhető.
+3. **Valódi PostgreSQL tesztelés H2 helyett (`Flyway` + `Testcontainers`):**
+   A `ddl-auto: update` kényelmes tanuláshoz, de hamar rájöttem, hogy könnyen elfedi a hibákat. Itt `ddl-auto: validate` fut Flyway migrációkkal, az integrációs tesztek pedig Testcontainers-szel indított valódi PostgreSQL 16-on mennek végig. Ha egy oszloptípus vagy megszorítás nem stimmel az entitás és az SQL között, már a tesztek elhasalnak. (Érdekes hibakeresés volt, amikor az újabb Docker Engine 29 elutasította a Testcontainers alapértelmezett régi API hívásait — végül a `docker-java.properties` beállításával sikerült feloldani.)
 
-4. **Optimista zárolás (`@Version`) versenyhelyzetek ellen:**
-   A `Book` entitáson található `@Version` mező megakadályozza a párhuzamos módosításokból adódó „lost update” hibákat (pl. ha két felhasználó egy időben próbálja kikölcsönözni ugyanazt a könyvet). Ütközés esetén a Hibernate `OptimisticLockingFailureException`-t dob, amelyet a `GlobalExceptionHandler` egységes `409 Conflict` válasszá alakít.
+4. **Az üzleti logika helye a backendben (`@Transactional` és `@Version`):**
+   A frontenden letiltott „Kölcsönzés” gomb csak kényelmi funkció; ha két kérés egyszerre érkezik ugyanarra a könyvre, a backendnek kell védenie az állapotot. A 3 könyves limitet és az elérhetőséget tranzakción belül ellenőrzöm, a `Book` entitáson lévő `@Version` optimista zárolás pedig megfogja a párhuzamos módosításokat, amiből a `GlobalExceptionHandler` egységes `409 Conflict` választ ad vissza az Angular felületnek.
+
+5. **Jogosultságkezelés az UI-n túl:**
+   Az Angular oldalon lévő route guardok és elrejtett admin gombok önmagukban még nem jelentenek biztonságot. A valódi védelmet a stateless JWT filter és a backend `@PreAuthorize` szabályai adják — ezért írtam külön integrációs teszteket arra is, hogy egy sima `MEMBER` tokennel tényleg `403 Forbidden`-t kapjon az admin végpontokra, token nélkül pedig `401 Unauthorized`-ot.
