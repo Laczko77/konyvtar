@@ -30,4 +30,8 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     @EntityGraph(attributePaths = {"book", "user"})
     @Query("SELECT l FROM Loan l WHERE l.returnedAt IS NULL AND l.dueDate < :now ORDER BY l.dueDate ASC")
     List<Loan> findOverdueLoans(@Param("now") LocalDateTime now);
+
+    @EntityGraph(attributePaths = {"book", "user"})
+    @Query("SELECT l FROM Loan l WHERE l.returnedAt IS NOT NULL OR l.dueDate >= :now ORDER BY l.borrowedAt DESC")
+    List<Loan> findNonOverdueLoans(@Param("now") LocalDateTime now);
 }
