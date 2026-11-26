@@ -2,7 +2,12 @@
   <header class="navbar">
     <div class="navbar-inner">
       <div class="navbar-left">
-        <a routerLink="/books" class="brand">Könyvtár</a>
+        <a routerLink="/books" class="brand">
+          <svg class="brand-mark" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M5 3.5h10v13l-5-3-5 3v-13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          <span>Könyvtár</span>
+        </a>
         <nav class="nav-links" aria-label="Fő navigáció">
           <a routerLink="/books" routerLinkActive="active">Könyvek</a>
           <a routerLink="/loans" routerLinkActive="active">Kölcsönzéseim</a>
@@ -16,7 +21,7 @@
         @if (authService.currentUser(); as user) {
           <div class="user-chip">
             <span class="user-name">{{ user.fullName }}</span>
-            <span class="badge" [class.badge-warning]="user.role === 'ADMIN'" [class.badge-neutral]="user.role === 'MEMBER'">
+            <span class="role-tag" [class.role-admin]="user.role === 'ADMIN'">
               {{ user.role }}
             </span>
           </div>

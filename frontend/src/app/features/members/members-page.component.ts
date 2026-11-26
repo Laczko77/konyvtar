@@ -40,7 +40,7 @@ import { extractApiError, LibraryApiService } from '../../core/services/library-
               <tbody>
                 @for (member of members(); track member.id) {
                   <tr>
-                    <td>#{{ member.id }}</td>
+                    <td><code>#{{ member.id }}</code></td>
                     <td><strong>{{ member.fullName }}</strong></td>
                     <td>{{ member.email }}</td>
                     <td>

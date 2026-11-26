@@ -137,15 +137,25 @@ import { extractApiError, LibraryApiService } from '../../core/services/library-
         gap: 12px;
       }
       .toggle-group {
-        display: flex;
-        gap: 6px;
+        display: inline-flex;
+        padding: 3px;
+        background: var(--surface-alt);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        gap: 4px;
+      }
+      .toggle-group .btn-secondary {
+        border-color: transparent;
+        background: transparent;
+        color: var(--text-muted);
       }
       .overdue-toggle {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        font-size: 0.9rem;
+        font-size: 0.86rem;
         font-weight: 500;
+        color: var(--text-muted);
         cursor: pointer;
       }
       .muted-email {

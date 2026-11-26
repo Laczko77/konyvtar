@@ -124,8 +124,8 @@ import { extractApiError, LibraryApiService } from '../../core/services/library-
               <tbody>
                 @for (book of books(); track book.id) {
                   <tr>
-                    <td><strong>{{ book.title }}</strong></td>
-                    <td>{{ book.author }}</td>
+                    <td><span class="book-title">{{ book.title }}</span></td>
+                    <td class="book-author">{{ book.author }}</td>
                     <td><code>{{ book.isbn }}</code></td>
                     <td>{{ book.publishedYear ?? '—' }}</td>
                     <td>
@@ -198,17 +198,31 @@ import { extractApiError, LibraryApiService } from '../../core/services/library-
     `
       .filters-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: 1fr 1fr 180px auto;
         gap: 12px;
         align-items: end;
+      }
+      @media (max-width: 760px) {
+        .filters-grid {
+          grid-template-columns: 1fr;
+        }
       }
       .filter-actions {
         display: flex;
         gap: 8px;
       }
+      .book-title {
+        font-weight: 500;
+        color: var(--text);
+      }
+      .book-author {
+        color: var(--text-muted);
+      }
       .book-form-card h2 {
         margin: 0 0 14px;
-        font-size: 1.15rem;
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
+        font-weight: 500;
       }
       .book-form-grid {
         display: grid;

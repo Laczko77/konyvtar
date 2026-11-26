@@ -12,8 +12,13 @@ import { extractApiError } from '../../core/services/library-api.service';
     <div class="auth-wrapper">
       <div class="card auth-card">
         <div class="auth-header">
-          <h1>Könyvtár- és kölcsönzéskezelő</h1>
-          <p class="page-subtitle">Jelentkezz be vagy hozz létre új tagfiókot</p>
+          <div class="auth-mark" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none">
+              <path d="M5 3.5h10v13l-5-3-5 3v-13Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h1>Könyvtár</h1>
+          <p class="page-subtitle">Kölcsönzéskezelő és katalógus</p>
         </div>
 
         <div class="tabs" role="tablist">
@@ -149,61 +154,77 @@ import { extractApiError } from '../../core/services/library-api.service';
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 24px 16px;
+        padding: 32px 16px;
       }
       .auth-card {
         width: 100%;
-        max-width: 440px;
-        padding: 28px;
+        max-width: 400px;
+        padding: 32px 28px 26px;
       }
       .auth-header {
-        margin-bottom: 20px;
-        text-align: center;
+        margin-bottom: 22px;
+        text-align: left;
+      }
+      .auth-mark {
+        width: 24px;
+        height: 24px;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+      .auth-mark svg {
+        width: 100%;
+        height: 100%;
       }
       .auth-header h1 {
         margin: 0;
-        font-size: 1.35rem;
+        font-family: var(--font-serif);
+        font-size: 1.7rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
       }
       .tabs {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-        padding: 4px;
-        background: var(--surface-alt);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        margin-bottom: 18px;
+        display: flex;
+        gap: 20px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 20px;
       }
       .tab-btn {
-        padding: 8px 12px;
+        padding: 0 2px 10px;
         border: none;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
         background: transparent;
-        border-radius: 7px;
-        font-weight: 600;
-        font-size: 0.9rem;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        font-size: 0.88rem;
         color: var(--text-muted);
         cursor: pointer;
+        transition: color 0.14s ease, border-color 0.14s ease;
+      }
+      .tab-btn:hover {
+        color: var(--text);
       }
       .tab-btn.active {
-        background: var(--surface);
-        color: var(--primary);
-        box-shadow: var(--shadow);
+        color: var(--text);
+        border-bottom-color: var(--accent);
       }
       .demo-box {
-        margin-top: 18px;
-        padding-top: 14px;
+        margin-top: 22px;
+        padding-top: 16px;
         border-top: 1px solid var(--border);
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
         gap: 8px;
       }
       .demo-title {
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         color: var(--text-muted);
       }
       .demo-actions {
         display: flex;
-        gap: 8px;
+        gap: 6px;
       }
     `,
   ],
