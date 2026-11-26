@@ -82,14 +82,14 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
 
 * **Cél:** Teljes üzleti réteg, szigorú validáció és hibakezelés, REST végpontok, Swagger dokumentáció.
 
-- [ ] **BL-020** `[P0]` **DTO `record`-ok és mappelés kialakítása**
+- [x] **BL-020** `[P0]` **DTO `record`-ok és mappelés kialakítása**
   * Auth DTO-k: `RegisterRequest`, `LoginRequest`, `AuthResponse` (token + user adatok/role).
   * Book DTO-k: `BookRequest` (`@NotBlank`, `@Size`, `@Min`/`@Max` validációkkal), `BookResponse`.
   * Member DTO-k: `MemberResponse`.
   * Loan DTO-k: `CreateLoanRequest` (`@NotNull bookId`), `LoanResponse` (számított `overdue` boolean mezővel: `returnedAt == null && now > dueDate`).
   * Ellenőrzés: egyetlen Controller sem adhat vissza JPA entitást.
 
-- [ ] **BL-021** `[P0]` **Kivételkezelés és globális `@RestControllerAdvice`**
+- [x] **BL-021** `[P0]` **Kivételkezelés és globális `@RestControllerAdvice`**
   * Egyedi kivételek létrehozása:
     * `ResourceNotFoundException` (`404 Not Found`)
     * `LoanLimitExceededException` (`409 Conflict`)
@@ -99,14 +99,14 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
     * `UnauthorizedActionException` / `AccessDeniedException` (`403 Forbidden`)
   * `GlobalExceptionHandler` (`@RestControllerAdvice`): egységes `ErrorResponse` vagy RFC 7807 `ProblemDetail` (`timestamp`, `status`, `error`, `message`, `validationErrors`), `@Valid` (`MethodArgumentNotValidException`) és optimista zárolási hiba (`ObjectOptimisticLockingFailureException` -> `409 Conflict`) kezelése.
 
-- [ ] **BL-022** `[P0]` **Könyvkezelő szolgáltatás és API (`BookService` & `BookController`)**
+- [x] **BL-022** `[P0]` **Könyvkezelő szolgáltatás és API (`BookService` & `BookController`)**
   * `GET /api/books?title=&author=&available=&page=0&size=10` — `Specification` alapú szűrés és lapozás (`Pageable`).
   * `GET /api/books/{id}` — könyv részletei.
   * `POST /api/books` — új könyv felvitele (`ADMIN`, ISBN egyediség ellenőrzése).
   * `PUT /api/books/{id}` — könyv módosítása (`ADMIN`).
   * `DELETE /api/books/{id}` — könyv törlése (`ADMIN`, aktív kölcsönzés esetén védett/kezelt hibaág).
 
-- [ ] **BL-023** `[P0]` **Kölcsönzéskezelő szolgáltatás és API (`LoanService` & `LoanController`)**
+- [x] **BL-023** `[P0]` **Kölcsönzéskezelő szolgáltatás és API (`LoanService` & `LoanController`)**
   * `POST /api/loans` (`@Transactional`):
     * Könyv létezésének és elérhetőségének (`available == true` és nincs aktív `Loan`) ellenőrzése -> `BookNotAvailableException`.
     * Tag aktív kölcsönzéseinek számolása (max. 3) -> `LoanLimitExceededException`.
@@ -118,11 +118,11 @@ Ez a dokumentum a [PRD.md](./PRD.md) alapján készült fejlesztési terv és fe
   * `GET /api/loans/my` — bejelentkezett felhasználó saját kölcsönzései.
   * `GET /api/loans?overdue=true` — összes kölcsönzés (`ADMIN`), opcionális `overdue` szűrővel.
 
-- [ ] **BL-024** `[P1]` **Tagkezelő szolgáltatás és API (`MemberService` & `MemberController`)**
+- [x] **BL-024** `[P1]` **Tagkezelő szolgáltatás és API (`MemberService` & `MemberController`)**
   * `GET /api/members` — összes tag listázása (`ADMIN`).
   * `GET /api/members/me` — aktuálisan bejelentkezett felhasználó adatai.
 
-- [ ] **BL-025** `[P1]` **Springdoc OpenAPI / Swagger UI konfiguráció**
+- [x] **BL-025** `[P1]` **Springdoc OpenAPI / Swagger UI konfiguráció**
   * `OpenApiConfig`: Bearer JWT security scheme beállítása, hogy a Swagger UI-ból közvetlenül lehessen tokennel hívni a védett végpontokat.
   * Elérhetőség ellenőrzése a `/swagger-ui.html` útvonalon.
 
